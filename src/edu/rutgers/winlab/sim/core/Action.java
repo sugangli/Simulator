@@ -8,11 +8,6 @@ public abstract class Action {
 
 	public abstract double execute(Object... args);
 	
-//	public void execute(Serial<MACPacket> serial, MACPacket macpacket, Node n) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
 	
 
 }

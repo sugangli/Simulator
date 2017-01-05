@@ -29,11 +29,11 @@ public class EventHandlerQueue<T> {
 		@Override
 		public double execute(Object... args){
 			if(InnerQueue.getSize() == 0){
-				System.out.println("InnerQueue.getSize == 0");
+//				System.out.println("InnerQueue.getSize == 0");
 				Busy = false;
 				return 0;
 			}
-			System.out.println("InnerQueue.getSize != 0");
+//			System.out.println("InnerQueue.getSize != 0");
 			T item = InnerQueue.GetData();
 			Serial<T> s = new Serial<T>(EventHandler, item);
 			Action a = new Action() {
@@ -60,7 +60,7 @@ public class EventHandlerQueue<T> {
 		if(!Busy){
 			
 			Busy = true;
-			System.out.println("Enqueue: HandleItemAction");
+//			System.out.println("Enqueue: HandleItemAction");
 			EventQueue.AddEvent(EventQueue.Now(), new HandleItemAction());
 			
 		}

@@ -6,10 +6,11 @@ public abstract class Node {
 	
 	private HashMap<Node, LinkState> Neighbors = new HashMap<Node, LinkState>();
 	private String Name;
-	private final static double BANDWIDTH_MBIPS = 1000;
+	private final static double BANDWIDTH_MBPS = 1000;
 	private EventHandlerQueue<MACPacket> incomingQueue;
 	private EventHandlerQueue<MACPacket> outgoingQueue;
 	private Serial.SerialAction<MACPacket> processPacket;
+	private double innerProcessDelay = EventQueue.MICRO_SECOND;
 	
 	public Node(String name){
 		Name = name;
@@ -21,7 +22,7 @@ public abstract class Node {
 		this.processPacket = processPacket;
 	}
 	
-	public String getName(Serial.SerialAction<MACPacket> processPacket) {
+	public String getName() {
 		return Name;
 	}
 
@@ -118,7 +119,7 @@ public abstract class Node {
 			if (parameter.To == Node.this || parameter == null ){
 				s.AddEvent(processPacket,  parameter);
 			}
-			return 100 * EventQueue.MICRO_SECOND;
+			return innerProcessDelay;
 		}
 	}
 	
@@ -131,13 +132,13 @@ public abstract class Node {
 			double receiveTime = EventQueue.Now() + sendTime;
 			if(parameter.To == null){
 				for(HashMap.Entry<Node, LinkState> entry: Neighbors.entrySet()){
-					System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
+//					System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
 					EventQueue.AddEvent(receiveTime + entry.getValue().getDelay(), 
 							entry.getKey().enqueueIncomingPacketAction, parameter);
 				}
 			}else{
 				LinkState ls = Neighbors.get(parameter.To);
-				System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
+//				System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
 				EventQueue.AddEvent(receiveTime + ls.Delay, parameter.To.enqueueIncomingPacketAction, parameter);
 			}
 			return sendTime;
@@ -160,7 +161,7 @@ public abstract class Node {
 	}
 	
 	public double GetSendTimeInSeconds(ISerializable packet){
-		return packet.getSizeInBits() / BANDWIDTH_MBIPS / ISerializableHelper.MBIT;
+		return packet.getSizeInBits() / BANDWIDTH_MBPS / ISerializableHelper.MBIT;
 	}
 	private Action enqueueIncomingPacketAction = new Action() {
 		@Override

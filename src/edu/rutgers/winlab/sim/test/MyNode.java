@@ -1,8 +1,6 @@
 package edu.rutgers.winlab.sim.test;
 
-import edu.rutgers.winlab.sim.core.Action;
 import edu.rutgers.winlab.sim.core.EventQueue;
-import edu.rutgers.winlab.sim.core.ISerializable;
 import edu.rutgers.winlab.sim.core.ISerializableHelper;
 import edu.rutgers.winlab.sim.core.MACPacket;
 import edu.rutgers.winlab.sim.core.Node;
@@ -54,42 +52,21 @@ public class MyNode extends Node{
 			@Override
 			public int getSizeInBits() {
 				
-				return 125 * ISerializableHelper.KBIT / 2 - MACPacket.MAC_PACKET_HEADER_SIZE;
+				return 1454 * ISerializableHelper.BYTE/8  - MACPacket.MAC_PACKET_HEADER_SIZE;
 			}
 			
 		}
-//
-//	
-//	public class MyProcessPacketAction extends ProcessPacketAction {
-//		
-//		@Override
-//		public void setDelay(double delay) {
-//			super.setDelay(delay);
-//		}
-//		@Override 
-//		public void execute(Object...objects){
-//			Node mynode = (Node) objects[0];
-//			@SuppressWarnings("unchecked")
-//			Serial<MACPacket> serial = (Serial<MACPacket>) objects[1];
-//			MACPacket macpaket = (MACPacket) objects[2];
-//			MyData data = (MyData) macpaket.getMacpayload();
-//			if (data == null) return;
-//			if (data.getVal().equals("aa")){
-//				MACPacket new_packet = new MACPacket(mynode, macpaket.From, new MyData("BB"));
-//				serial.AddEvent(new SendPacketAction(new_packet, false), new MACPacket(mynode, macpaket.From, new MyData("BB")));
-//			}
-//			setDelay(500 * EventQueue.MILLI_SECOND);
-//		}
-//		
-//	}
+
 	
 	public static void main(String[] args){
 		MyNode n1 = new MyNode("N1");
 		MyNode n2 = new MyNode("N2");
+		MyNode n3 = new MyNode("N3");
 		Node.AddNodeLink(n1, n2, 0);
+		Node.AddNodeLink(n1, n3, 0);
 		n1.sendPacket(new MACPacket(n1, n2, new MyData("aa")), false);
 //		n2.sendPacket(new MACPacket(n2, n1, new MyData("aa")), false);
-//		n1.sendPacket(new MACPacket(n1, n2, new MyData("aa")), false);
+		n1.sendPacket(new MACPacket(n1, n3, new MyData("aa")), false);
 		EventQueue.Run();
 	}
 

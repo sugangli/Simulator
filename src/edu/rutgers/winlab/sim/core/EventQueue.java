@@ -50,7 +50,7 @@ public class EventQueue {
 		while (!events.isEmpty()) {
 
 			Event e = events.getFirst();
-			System.out.printf("run() now:%f%s\n", e.Time, e.action);
+//			System.out.printf("run() now:%f%s\n", e.Time, e.action);
 			now = e.Time;
 			e.DoEvent();
 			events.removeFirst();

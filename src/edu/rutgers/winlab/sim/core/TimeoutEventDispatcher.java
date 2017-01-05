@@ -2,7 +2,7 @@ package edu.rutgers.winlab.sim.core;
 
 public class TimeoutEventDispatcher {
 
-	private double timeouttime;
+	private long timeouttime;
 	private boolean active;
 	private TimeoutHandle timeouthandle;
 	private Object[] args;
@@ -14,7 +14,7 @@ public class TimeoutEventDispatcher {
 		return timeouttime;
 	};
 
-	public void setTimeoutTime(double timeouttime) {
+	public void setTimeoutTime(long timeouttime) {
 		this.timeouttime = timeouttime;
 	};
 
@@ -26,7 +26,7 @@ public class TimeoutEventDispatcher {
 		this.active = active;
 	};
 
-	public TimeoutEventDispatcher(double timeouttime, Action action, Object... args) {
+	public TimeoutEventDispatcher(long timeouttime, Action action, Object... args) {
 
 		this.timeouttime = timeouttime;
 		this.args = args;
@@ -37,7 +37,7 @@ public class TimeoutEventDispatcher {
 
 	}
 
-	public void Delay(double newtime) {
+	public void Delay(long newtime) {
 
 		assert newtime > this.timeouttime;
 		this.timeouttime = newtime;

@@ -36,7 +36,7 @@ public class Serial<T> {
     private List<Action> _serialFinishedHandlers = new ArrayList<>();
     
     public Serial(SerialAction<T> FirstEvent, T parameter){
-    	System.out.println("Serial()");
+//    	System.out.println("Serial()");
     	AddEvent(FirstEvent, parameter);
     	ScheduleNextEvent(EventQueue.Now());
     }
@@ -73,9 +73,10 @@ public class Serial<T> {
 			if(_events.size() > 0){
 	    		
 	    		SerialEventDataStructure seds = _events.get(0);
-	    		double nextEventTime = EventQueue.Now() + seds.getE().execute(Serial.this, seds.Parameter);
+	    		double execute_time = seds.getE().execute(Serial.this, seds.Parameter);
+    			double nextEventTime = EventQueue.Now() + execute_time;
 	    		_events.remove(0);
-	    		System.out.printf("RunEventAction.execute: now:%f %s %s%n", EventQueue.Now(), seds.getE(), seds.getParameter());
+//	    		System.out.printf("RunEventAction.execute: now:%f %f %s%n", EventQueue.Now(), execute_time, seds.getParameter());
 	    		ScheduleNextEvent(nextEventTime);
 	    		
 	    	}else{
@@ -83,9 +84,10 @@ public class Serial<T> {
 	    		if(_lastEvents.size() > 0){
 	    			
 	    			SerialEventDataStructure seds = _lastEvents.get(0);
-	    			double nextEventTime = EventQueue.Now() + seds.getE().execute(Serial.this, seds.Parameter);
+	    			double execute_time = seds.getE().execute(Serial.this, seds.Parameter);
+	    			double nextEventTime = EventQueue.Now() + execute_time;
 	    			_lastEvents.remove(0);
-	    			System.out.printf("RunEventAction.execute: now:%f %s %s%n", EventQueue.Now(), seds.getE(), seds.getParameter());
+//	    			System.out.printf("RunEventAction.execute: now:%f %f %s%n", EventQueue.Now(), execute_time, seds.getParameter());
 	    			ScheduleNextEvent(nextEventTime);
 	    			
 	    		}else{
