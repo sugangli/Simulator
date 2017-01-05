@@ -6,7 +6,7 @@ public abstract class Node {
 	
 	private HashMap<Node, LinkState> Neighbors = new HashMap<Node, LinkState>();
 	private String Name;
-	private final static double BANDWIDTH_MBPS = 1000;
+	private final static double BANDWIDTH_MBPS = 1500;
 	private EventHandlerQueue<MACPacket> incomingQueue;
 	private EventHandlerQueue<MACPacket> outgoingQueue;
 	private Serial.SerialAction<MACPacket> processPacket;

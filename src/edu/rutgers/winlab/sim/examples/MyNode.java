@@ -1,4 +1,4 @@
-package edu.rutgers.winlab.sim.test;
+package edu.rutgers.winlab.sim.examples;
 
 import edu.rutgers.winlab.sim.core.EventQueue;
 import edu.rutgers.winlab.sim.core.ISerializableHelper;

@@ -62,7 +62,7 @@ public class SimpleCrush {
 
 		List<List<String>> all_result = generatePerm(input);
 		List<List<String>> final_result = getnPr(all_result, groupsize);
-//		shuffleList(final_result);
+		shuffleList(final_result);
 		for(int i = 0; i < numofPG; i++){
 			DefaultMap.put(i, final_result.get(i));
 			PGs[i] = i;
@@ -161,32 +161,32 @@ public class SimpleCrush {
 
 	public static void  main(String[] args){
 
-//		int num_of_osd = 10;
-//		int num_of_PG = 100;
-//		HashMap<String, OSD> osds = new HashMap<String, OSD>();
-//		for (int i = 0; i < num_of_osd; i++){
-//			osds.put(Integer.toString(i), new OSD("" + i + ""));
-//		}	
-//		SimpleCrush sc = new SimpleCrush(osds, num_of_PG , 3);
-//		Iterator it = sc.getDefaultMap().entrySet().iterator();
-//		while (it.hasNext()) {
-//			Map.Entry pair = (Map.Entry)it.next();
-//			List<String> item = (ArrayList<String>) pair.getValue();
-//			System.out.println(pair.getKey() + " = " +item.toString());
-//			it.remove(); // avoids a ConcurrentModificationException
-//		}
-
-		List<String> sl = new ArrayList<String>();
-		sl.add("12");
-		sl.add("22");
-		sl.add("33");
-		sl.add("44");
-		
-		List<String[]> result = SimpleCrush.Combination(sl, 3);
-		for (String[] item: result){
-			String[] arr = (String[]) item;
-			System.out.println(Arrays.toString(arr));
+		int num_of_osd = 10;
+		int num_of_PG = 100;
+		HashMap<String, OSD> osds = new HashMap<String, OSD>();
+		for (int i = 0; i < num_of_osd; i++){
+			osds.put(Integer.toString(i), new OSD("" + i + ""));
+		}	
+		SimpleCrush sc = new SimpleCrush(osds, num_of_PG , 3);
+		Iterator it = sc.getDefaultMap().entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry)it.next();
+			List<String> item = (ArrayList<String>) pair.getValue();
+			System.out.println(pair.getKey() + " = " +item.toString());
+			it.remove(); // avoids a ConcurrentModificationException
 		}
+
+//		List<String> sl = new ArrayList<String>();
+//		sl.add("12");
+//		sl.add("22");
+//		sl.add("33");
+//		sl.add("44");
+//		
+//		List<String[]> result = SimpleCrush.Combination(sl, 3);
+//		for (String[] item: result){
+//			String[] arr = (String[]) item;
+//			System.out.println(Arrays.toString(arr));
+//		}
 		
 	}
 
