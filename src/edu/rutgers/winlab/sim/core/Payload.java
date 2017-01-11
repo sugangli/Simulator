@@ -2,18 +2,18 @@ package edu.rutgers.winlab.sim.core;
 
 public class Payload implements ISerializable{
 
-	private int SizeInBits;
+	private long SizeInBits;
 	private String Val;
 	
 	public Payload(String val){
 		Val = val;
 	}
 
-	public int getSizeInBits() {
+	public long getSizeInBits() {
 		return SizeInBits;
 	}
 
-	public void setSizeInBits(int sizeInBits) {
+	public void setSizeInBits(long sizeInBits) {
 		SizeInBits = sizeInBits;
 	}
 	

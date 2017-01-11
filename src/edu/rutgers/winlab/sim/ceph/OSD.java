@@ -17,23 +17,54 @@ import edu.rutgers.winlab.sim.core.Serial;
 
 
 public class OSD extends Node{
+	private HashMap<String, Integer> CommitMap = new HashMap<String, Integer>();
+	private HashMap<String, Node> WRITEMap = new HashMap<String, Node>();
+	private HashMap<String, Integer> ACKMap = new HashMap<String, Integer>();//ACK Counter, add 1 if one ack comes back
+	private static double DISK_BANDWIDTH_MBitPS = 1224;
+	private static double CONSTANT_WRITE_DELAY = 100 * EventQueue.MICRO_SECOND;
+	private static double EC_ENCODE_MBitPS_ = 11200; // RDP Encoding for K=6, M = 2
+	private static int EC_K = 6;
+	private static int EC_M = 2;
+	private static int Num_of_PG;
+
+	public static int getEC_K() {
+		return EC_K;
+	}
 
 
+
+	public static void setEC_K(int eC_K) {
+		EC_K = eC_K;
+	}
+
+
+
+	public static int getEC_M() {
+		return EC_M;
+	}
+
+
+
+	public static void setEC_M(int eC_M) {
+		EC_M = eC_M;
+	}
+	
 	private Serial.SerialAction<MACPacket> processPacket = new Serial.SerialAction<MACPacket>() {
 
 		@Override
 		public double execute(Serial<MACPacket> s, MACPacket macpacket) {
 			Payload payload = macpacket.getMacpayload();
+			
 			double process_delay = 0;
 			if(payload == null) return 0;
 			String[] s_array = payload.getVal().split(",");
 			switch (s_array[1]){
 			case "READ":	
-				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+//				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
 				break;
 				
 			case "WRITE":
-				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+//				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
 				int PG_num = Integer.parseInt(s_array[0]) % getNum_of_PG();
 				List<String> osd_group = SimpleCrush.getDefaultMap().get(PG_num);
 				OSD.this.sendPacket(new MACPacket(OSD.this, OSD.getOSDMap().get(osd_group.get(1)), 
@@ -42,7 +73,7 @@ public class OSD extends Node{
 						new CephPacket(s_array[0] + ",REPLICATION", payload.getSizeInBits())), false);
 				ACKMap.put(s_array[0], 0);
 				WRITEMap.put(s_array[0], macpacket.From);
-				process_delay = payload.getSizeInBits() / DISK_BANDWIDTH_MBPS / ISerializableHelper.MBIT
+				process_delay = payload.getSizeInBits() / DISK_BANDWIDTH_MBitPS / ISerializableHelper.MBIT
 						+ CONSTANT_WRITE_DELAY;		
 				//send replica to other two OSD;
 				break;
@@ -63,16 +94,16 @@ public class OSD extends Node{
 				break;
 				
 			case "REPLICATION":
-				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+//				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
 				OSD from = (OSD) macpacket.From;
 				OSD.this.sendPacket(new MACPacket(OSD.this, from, 
 						new CephPacket(s_array[0] + ",REPLICATIONACK", 64 * ISerializableHelper.BYTE)), false);
-				process_delay = payload.getSizeInBits() / DISK_BANDWIDTH_MBPS / ISerializableHelper.MBIT
+				process_delay = payload.getSizeInBits() / DISK_BANDWIDTH_MBitPS / ISerializableHelper.MBIT
 						+ CONSTANT_WRITE_DELAY;
 				break;
 				
 			case "REPLICATIONACK":
-				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+//				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
 				int counter = ACKMap.get(s_array[0]);
 				counter++;
 				if (counter < 2){
@@ -82,7 +113,39 @@ public class OSD extends Node{
 							new CephPacket(s_array[0] + ",WRITEACK", 64 * ISerializableHelper.BYTE)), false);
 				}
 				break;
-				
+			case "ECWRITE":
+				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				int ec_PG_num = Integer.parseInt(s_array[0]) % getNum_of_PG();
+				List<String> ec_osd_group = SimpleCrush.getDefaultMap().get(ec_PG_num);
+				long ec_data_size = payload.getSizeInBits()/EC_K;
+				ACKMap.put(s_array[0], 0);
+				WRITEMap.put(s_array[0], macpacket.From);
+				for (int i = 1; i < EC_K + EC_M; i++){
+					OSD.this.sendPacket(new MACPacket(OSD.this, OSD.getOSDMap().get(ec_osd_group.get(i)), 
+							new CephPacket(s_array[0] + ",ECDATA", ec_data_size)), false);
+				}
+				process_delay = payload.getSizeInBits() / EC_ENCODE_MBitPS_/ ISerializableHelper.MBIT
+						+ CONSTANT_WRITE_DELAY;
+				break;
+			case "ECDATA":
+				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				OSD ec_from = (OSD) macpacket.From;
+				OSD.this.sendPacket(new MACPacket(OSD.this, ec_from, 
+						new CephPacket(s_array[0] + ",ECDATAACK", 64 * ISerializableHelper.BYTE)), false);
+				process_delay = payload.getSizeInBits() / DISK_BANDWIDTH_MBitPS / ISerializableHelper.MBIT
+						+ CONSTANT_WRITE_DELAY;
+				break;
+			case "ECDATAACK":
+				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				int ec_counter = ACKMap.get(s_array[0]);
+				ec_counter++;
+				if (ec_counter < EC_K + EC_M - 1){
+					ACKMap.put(s_array[0], ec_counter);
+				}else{
+					OSD.this.sendPacket(new MACPacket(OSD.this, WRITEMap.get(s_array[0]), 
+							new CephPacket(s_array[0] + ",ECWRITEACK", 64 * ISerializableHelper.BYTE)), false);
+				}
+				break;
 			default:
 				System.out.println(s_array[1] + "Operation can not be regconized! Drop it!");
 				break;
@@ -111,12 +174,7 @@ public class OSD extends Node{
 		return OSDMap;
 	}
 
-	private HashMap<String, Integer> CommitMap = new HashMap<String, Integer>();
-	private HashMap<String, Node> WRITEMap = new HashMap<String, Node>();
-	private HashMap<String, Integer> ACKMap = new HashMap<String, Integer>();//ACK Counter, add 1 if one ack comes back
-	private static double DISK_BANDWIDTH_MBPS = 1224;
-	private static double CONSTANT_WRITE_DELAY = 100 * EventQueue.MICRO_SECOND;
-	private static int Num_of_PG;
+	
 
 	public static int getNum_of_PG() {
 		return Num_of_PG;
@@ -152,7 +210,8 @@ public class OSD extends Node{
 			OSDMap.put(Integer.toString(i),osd);
 		}
 		
-		SimpleCrush sc = new SimpleCrush(getOSDMap(), num_of_PG, 3);
+		List<List<String>> finallist  = SimpleCrush.Crush(getOSDMap(), num_of_PG , 3);
+		SimpleCrush.shuffleList(finallist, num_of_PG);
 		configureLAN(OSDMap);
 
 		for(int i = 0; i < 1024 * 10; i++){

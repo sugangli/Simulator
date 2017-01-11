@@ -6,13 +6,13 @@ import edu.rutgers.winlab.sim.core.Payload;
 
 public class CephPacket extends Payload{
 	
-	private int SizeInBits;
+	private long SizeInBits;
 	
-	public void setSizeInBits(int sizeInBits) {
+	public void setSizeInBits(long sizeInBits) {
 		SizeInBits = sizeInBits;
 	}
 
-	public CephPacket(String val, int sizeInBits) {
+	public CephPacket(String val, long sizeInBits) {
 		super(val);
 		SizeInBits = sizeInBits;
 		// TODO Auto-generated constructor stub
@@ -23,7 +23,7 @@ public class CephPacket extends Payload{
 	}
 
 	@Override
-	public int getSizeInBits() {
+	public long getSizeInBits() {
 		
 		return SizeInBits;
 	}

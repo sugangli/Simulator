@@ -50,7 +50,7 @@ public class MyNode extends Node{
 			}
 	
 			@Override
-			public int getSizeInBits() {
+			public long getSizeInBits() {
 				
 				return 1454 * ISerializableHelper.BYTE/8  - MACPacket.MAC_PACKET_HEADER_SIZE;
 			}

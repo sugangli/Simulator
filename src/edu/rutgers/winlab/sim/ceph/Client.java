@@ -24,6 +24,10 @@ public class Client extends Node {
 				break;
 			case "WRITEACK":
 				System.out.printf("Client %s get %s at Time %f\n", Client.this.getName(), payload.toString(), EventQueue.Now());
+				break;
+			case "ECWRITEACK":
+				System.out.printf("Client %s get %s at Time %f\n", Client.this.getName(), payload.toString(), EventQueue.Now());
+				break;
 			default:
 				break;			
 			}

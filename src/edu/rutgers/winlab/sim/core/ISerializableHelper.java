@@ -8,6 +8,7 @@ public class ISerializableHelper {
 	public final static int BYTE = 8;
 	public final static int KBYTE = 1024 * BYTE;
 	public final static int MBYTE = 1024 * KBYTE;
+	public final static long GBYTE = 1024 * MBYTE;
 	
 
 }

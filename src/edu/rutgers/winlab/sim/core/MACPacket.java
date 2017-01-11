@@ -23,7 +23,7 @@ public class MACPacket implements ISerializable {
 	}
 
 	@Override
-	public int getSizeInBits() {
+	public long getSizeInBits() {
 		
 		return Macpayload.getSizeInBits() + MAC_PACKET_HEADER_SIZE * 8;
 	}
