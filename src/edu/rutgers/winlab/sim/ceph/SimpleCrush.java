@@ -138,40 +138,6 @@ public class SimpleCrush {
 		a.set(change, helper);
 	}
 
-	public static List<List<String>> generatePerm(List<String> original) {
-		if (original.size() == 0) { 
-			List<List<String>> result = new ArrayList<List<String>>();
-			result.add(new ArrayList<String>());
-			return result;
-		}
-		String firstElement = original.remove(0);
-		List<List<String>> returnValue = new ArrayList<List<String>>();
-		List<List<String>> permutations = generatePerm(original);
-		for (List<String> smallerPermutated : permutations) {
-			for (int index=0; index <= smallerPermutated.size(); index++) {
-				List<String> temp = new ArrayList<String>(smallerPermutated);
-				temp.add(index, firstElement);
-				returnValue.add(temp);
-			}
-		}
-		return returnValue;
-	}
-
-	public static List<List<String>> getnPr(List<List<String>> allpermutation, int r){
-		List<List<String>> new_list = new ArrayList<List<String>>();
-		for (List<String> item : allpermutation){
-			List<String> tl = new ArrayList<String>();
-			for (int i = 0; i< r; i++){
-				tl.add(item.get(i));
-			}
-			new_list.add(tl);
-		}
-
-		Set<List<String>> s = new LinkedHashSet<>(new_list);
-		new_list.clear();
-		new_list.addAll(s);
-		return new_list;
-	}
 
 	public static List<List<String>> Permutation(List<String> original, int group_size){
 

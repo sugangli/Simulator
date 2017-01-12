@@ -38,7 +38,7 @@ public class CephWriteTest {
 		for(int i = 0; i < experimenttime; i++){
 			SimpleCrush.shuffleList(finallist, num_of_PG);//shuffle the list for every experiment
 			
-			int object_size =  3* ISerializableHelper.MBYTE; 
+			int object_size =  32* ISerializableHelper.MBYTE; 
 			long write_time = 1024 * 10;
 			long workload = write_time * object_size;
 //			System.out.printf("workload:%d\n", workload);
@@ -49,14 +49,14 @@ public class CephWriteTest {
 
 			}
 			
-			//			PrintStream out;
-			//			try {
-			//				out = new PrintStream(new FileOutputStream("output.txt"));
-			//				System.setOut(out);
-			//			} catch (FileNotFoundException e) {
-			//				// TODO Auto-generated catch block
-			//				e.printStackTrace();
-			//			}
+						PrintStream out;
+						try {
+							out = new PrintStream(new FileOutputStream("writetest_output.txt"));
+							System.setOut(out);
+						} catch (FileNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
 			EventQueue.Run();
 //			long time7 = System.currentTimeMillis();
@@ -64,7 +64,7 @@ public class CephWriteTest {
 			double finish_time = EventQueue.Now();
 			EventQueue.Reset();
 			double bandwidth  = workload/finish_time/ISerializableHelper.MBYTE;
-			System.out.printf("%f MB/s\n", bandwidth);
+//			System.out.printf("%f MB/s\n", bandwidth);
 		}
 		
 

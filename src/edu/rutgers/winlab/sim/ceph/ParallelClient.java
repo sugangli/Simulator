@@ -52,13 +52,13 @@ public class ParallelClient extends Node {
 			String[] s_array = payload.getVal().split(",");
 			switch (s_array[1]){
 			case "READ":	
-				System.out.printf("ParallelClient %s get %s at Time %f\n", ParallelClient.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("ParallelClient %s get %s Size %d Time %f\n", ParallelClient.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				break;
 			case "WRITEACK":
-				System.out.printf("ParallelClient %s get %s at Time %f\n", ParallelClient.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("ParallelClient %s get %s Size %d Time %f\n", ParallelClient.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				break;
 			case "ECWRITEACK":
-				System.out.printf("ParallelClient %s get %s at Time %f\n", ParallelClient.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("ParallelClient %s get %s Size %d Time %f\n", ParallelClient.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				break;
 			default:
 				break;			
@@ -82,7 +82,7 @@ public class ParallelClient extends Node {
 			ParallelClient.this.sendPacket(new MACPacket(ParallelClient.this, ParallelOSD.getOSDMap().get(ParallelOSD.targetOSDLookup(s_array[0])), 
 					new CephPacket(s_array[0] + ",ECWRITE", ec_data_size)), false);
 			for (int i = 1; i < EC_K + EC_M; i++){
-//				System.out.printf("ParallelClient %s sends %s at Time %f\n", ParallelClient.this.getName(), payload.toString(), EventQueue.Now());
+//				System.out.printf("ParallelClient %s send %s Size %d Time %f\n", ParallelClient.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 //				System.out.println(EC_K + EC_M);
 				ParallelClient.this.sendPacket(new MACPacket(ParallelClient.this, ParallelOSD.getOSDMap().get(ec_osd_group.get(i)), 
 						new CephPacket(s_array[0] + ",BUFFER", ec_data_size)), false);

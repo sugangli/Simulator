@@ -64,7 +64,7 @@ public class OSD extends Node{
 				break;
 				
 			case "WRITE":
-//				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", OSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				int PG_num = Integer.parseInt(s_array[0]) % getNum_of_PG();
 				List<String> osd_group = SimpleCrush.getDefaultMap().get(PG_num);
 				OSD.this.sendPacket(new MACPacket(OSD.this, OSD.getOSDMap().get(osd_group.get(1)), 
@@ -78,23 +78,8 @@ public class OSD extends Node{
 				//send replica to other two OSD;
 				break;
 				
-			case "BUFFER":
-				break;
-				
-			case "COMMIT":
-				break;
-				
-			case "DATA":
-				break;
-				
-			case "COMMITACK":
-				break;
-				
-			case "WRITEACK":
-				break;
-				
 			case "REPLICATION":
-//				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", OSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				OSD from = (OSD) macpacket.From;
 				OSD.this.sendPacket(new MACPacket(OSD.this, from, 
 						new CephPacket(s_array[0] + ",REPLICATIONACK", 64 * ISerializableHelper.BYTE)), false);
@@ -103,7 +88,7 @@ public class OSD extends Node{
 				break;
 				
 			case "REPLICATIONACK":
-//				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", OSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				int counter = ACKMap.get(s_array[0]);
 				counter++;
 				if (counter < 2){
@@ -114,7 +99,7 @@ public class OSD extends Node{
 				}
 				break;
 			case "ECWRITE":
-				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", OSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				int ec_PG_num = Integer.parseInt(s_array[0]) % getNum_of_PG();
 				List<String> ec_osd_group = SimpleCrush.getDefaultMap().get(ec_PG_num);
 				long ec_data_size = payload.getSizeInBits()/EC_K;
@@ -129,7 +114,7 @@ public class OSD extends Node{
 						+ CONSTANT_WRITE_DELAY;
 				break;
 			case "ECDATA":
-				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", OSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				OSD ec_from = (OSD) macpacket.From;
 				OSD.this.sendPacket(new MACPacket(OSD.this, ec_from, 
 						new CephPacket(s_array[0] + ",ECDATAACK", 64 * ISerializableHelper.BYTE)), false);
@@ -137,7 +122,7 @@ public class OSD extends Node{
 						+ CONSTANT_WRITE_DELAY;
 				break;
 			case "ECDATAACK":
-				System.out.printf("OSD %s get %s at Time %f\n", OSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", OSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				int ec_counter = ACKMap.get(s_array[0]);
 				ec_counter++;
 				if (ec_counter < EC_K + EC_M - 1){

@@ -1,5 +1,8 @@
 package edu.rutgers.winlab.sim.examples;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 
 import edu.rutgers.winlab.sim.ceph.CephPacket;
@@ -16,8 +19,8 @@ public class CephParallelWriteTest {
 
 	public static void main(String[] args) {
 		ParallelClient n1 = new ParallelClient("Client1", false);
-		int num_of_osd = 3;
-		int num_of_PG = 5;
+		int num_of_osd = 100;
+		int num_of_PG = 1000;
 		ParallelOSD.setNum_of_PG(num_of_PG);
 
 		for (int i = 0; i < num_of_osd; i++){
@@ -35,8 +38,8 @@ public class CephParallelWriteTest {
 
 		SimpleCrush.shuffleList(finallist, num_of_PG);//shuffle the list for every experiment
 
-		int object_size =  ISerializableHelper.MBYTE; 
-		long write_time = 1;
+		int object_size =  32 * ISerializableHelper.MBYTE; 
+		long write_time = 1024 *10;
 		long workload = write_time * object_size;
 		//			System.out.printf("workload:%d\n", workload);
 		for(int j = 0; j < write_time; j++){
@@ -46,14 +49,14 @@ public class CephParallelWriteTest {
 
 		}
 
-		//			PrintStream out;
-		//			try {
-		//				out = new PrintStream(new FileOutputStream("output.txt"));
-		//				System.setOut(out);
-		//			} catch (FileNotFoundException e) {
-		//				// TODO Auto-generated catch block
-		//				e.printStackTrace();
-		//			}
+		PrintStream out;
+		try {
+			out = new PrintStream(new FileOutputStream("paw_output.txt"));
+			System.setOut(out);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		EventQueue.Run();
 		//			long time7 = System.currentTimeMillis();
@@ -61,7 +64,7 @@ public class CephParallelWriteTest {
 		double finish_time = EventQueue.Now();
 		EventQueue.Reset();
 		double bandwidth  = workload/finish_time/ISerializableHelper.MBYTE;
-		System.out.printf("%f MB/s\n", bandwidth);
+		//		System.out.printf("%f MB/s\n", bandwidth);
 
 
 

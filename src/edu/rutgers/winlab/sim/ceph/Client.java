@@ -18,13 +18,13 @@ public class Client extends Node {
 			String[] s_array = payload.getVal().split(",");
 			switch (s_array[1]){
 			case "READ":	
-				System.out.printf("Client %s get %s at Time %f\n", Client.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("Client %s get %s Size %d Time %f\n", Client.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				break;
 			case "WRITEACK":
-				System.out.printf("Client %s get %s at Time %f\n", Client.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("Client %s get %s Size %d Time %f\n", Client.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				break;
 			case "ECWRITEACK":
-				System.out.printf("Client %s get %s at Time %f\n", Client.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("Client %s get %s Size %d Time %f\n", Client.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				break;
 			default:
 				break;			

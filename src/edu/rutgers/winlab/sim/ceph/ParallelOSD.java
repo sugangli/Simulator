@@ -65,7 +65,7 @@ public class ParallelOSD extends Node{
 				break;
 				
 			case "WRITE":
-				System.out.printf("OSD %s get %s at Time %f\n", ParallelOSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", ParallelOSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				int PG_num = Integer.parseInt(s_array[0]) % getNum_of_PG();
 				List<String> osd_group = SimpleCrush.getDefaultMap().get(PG_num);
 				ParallelOSD.this.sendPacket(new MACPacket(ParallelOSD.this, ParallelOSD.getOSDMap().get(osd_group.get(1)), 
@@ -76,11 +76,11 @@ public class ParallelOSD extends Node{
 				WRITEMap.put(s_array[0], macpacket.From);
 				process_delay = payload.getSizeInBits() / DISK_BANDWIDTH_MBitPS / ISerializableHelper.MBIT
 						+ CONSTANT_WRITE_DELAY;		
-				//send replica to other two OSD;
+				//send commit to other two OSD;
 				break;
 				
 			case "BUFFER":
-				System.out.printf("OSD %s get %s at Time %f\n",  ParallelOSD .this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", ParallelOSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				if(CommitMap.get(s_array[0]) != null){
 					ParallelOSD.this.sendPacket(new MACPacket(ParallelOSD.this, ParallelOSD.getOSDMap().get(ParallelOSD.targetOSDLookup(s_array[0])), 
 							new CephPacket(s_array[0] + ",COMMITACK", ACK_SIZE)), false);
@@ -93,7 +93,7 @@ public class ParallelOSD extends Node{
 				break;
 				
 			case "COMMIT":
-				System.out.printf("OSD %s get %s at Time %f\n",  ParallelOSD .this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", ParallelOSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				if(CommitMap.get(s_array[0]) != null){
 					ParallelOSD.this.sendPacket(new MACPacket(ParallelOSD.this, (ParallelOSD) macpacket.From, 
 							new CephPacket(s_array[0] + ",COMMITACK", ACK_SIZE)), false);
@@ -104,7 +104,7 @@ public class ParallelOSD extends Node{
 				}
 				break;
 			case "ECCOMMIT":
-				System.out.printf("OSD %s get %s at Time %f\n",  ParallelOSD .this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", ParallelOSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				if(CommitMap.get(s_array[0]) != null){
 					ParallelOSD.this.sendPacket(new MACPacket(ParallelOSD.this, (ParallelOSD) macpacket.From, 
 							new CephPacket(s_array[0] + ",ECCOMMITACK", ACK_SIZE)), false);
@@ -113,12 +113,9 @@ public class ParallelOSD extends Node{
 				}else{
 					CommitMap.put(s_array[0], payload.getSizeInBits());
 				}
-				break;	
-			case "DATA":
 				break;
-				
 			case "COMMITACK":
-				System.out.printf("OSD %s get %s at Time %f\n",  ParallelOSD .this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", ParallelOSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				int counter = ACKMap.get(s_array[0]);
 				counter++;
 				if (counter < 2){
@@ -128,11 +125,9 @@ public class ParallelOSD extends Node{
 							new CephPacket(s_array[0] + ",WRITEACK", ACK_SIZE)), false);
 				}
 				break;
-			case "WRITEACK":
-				break;
 				
 			case "ECWRITE":
-				System.out.printf("OSD %s get %s at Time %f\n", ParallelOSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", ParallelOSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				int ec_PG_num = Integer.parseInt(s_array[0]) % getNum_of_PG();
 				List<String> ec_osd_group = SimpleCrush.getDefaultMap().get(ec_PG_num);
 				long ec_data_size = payload.getSizeInBits();
@@ -140,13 +135,13 @@ public class ParallelOSD extends Node{
 				WRITEMap.put(s_array[0], macpacket.From);
 				for (int i = 1; i < EC_K + EC_M; i++){
 					ParallelOSD.this.sendPacket(new MACPacket(ParallelOSD.this, ParallelOSD.getOSDMap().get(ec_osd_group.get(i)), 
-							new CephPacket(s_array[0] + ",ECCOMMIT", ec_data_size)), false);
+							new CephPacket(s_array[0] + ",ECCOMMIT", ACK_SIZE)), false);
 				}
 				process_delay =  ec_data_size / DISK_BANDWIDTH_MBitPS / ISerializableHelper.MBIT
 						+ CONSTANT_WRITE_DELAY;
 				break;
 			case "ECCOMMITACK":
-				System.out.printf("OSD %s get %s at Time %f\n", ParallelOSD.this.getName(), payload.toString(), EventQueue.Now());
+				System.out.printf("OSD %s get %s Size %d Time %f\n", ParallelOSD.this.getName(), payload.toString(), payload.getSizeInBits(), EventQueue.Now());
 				int ec_counter = ACKMap.get(s_array[0]);
 				ec_counter++;
 				if (ec_counter < EC_K + EC_M - 1){
@@ -155,25 +150,6 @@ public class ParallelOSD extends Node{
 					ParallelOSD.this.sendPacket(new MACPacket(ParallelOSD.this, WRITEMap.get(s_array[0]), 
 							new CephPacket(s_array[0] + ",ECWRITEACK", ACK_SIZE)), false);
 				}
-				break;
-			case "ECDATA":
-				System.out.printf("OSD %s get %s at Time %f\n", ParallelOSD.this.getName(), payload.toString(), EventQueue.Now());
-				ParallelOSD ec_from = (ParallelOSD) macpacket.From;
-				ParallelOSD.this.sendPacket(new MACPacket(ParallelOSD.this, ec_from, 
-						new CephPacket(s_array[0] + ",ECDATAACK", ACK_SIZE)), false);
-				process_delay = payload.getSizeInBits() / DISK_BANDWIDTH_MBitPS / ISerializableHelper.MBIT
-						+ CONSTANT_WRITE_DELAY;
-				break;
-			case "ECDATAACK":
-//				System.out.printf("OSD %s get %s at Time %f\n", ParallelOSD.this.getName(), payload.toString(), EventQueue.Now());
-//				int ec_counter = ACKMap.get(s_array[0]);
-//				ec_counter++;
-//				if (ec_counter < EC_K + EC_M - 1){
-//					ACKMap.put(s_array[0], ec_counter);
-//				}else{
-//					ParallelOSD.this.sendPacket(new MACPacket(ParallelOSD.this, WRITEMap.get(s_array[0]), 
-//							new CephPacket(s_array[0] + ",ECWRITEACK", ACK_SIZE)), false);
-//				}
 				break;
 			default:
 				System.out.printf("OSD %s get %s at Time %f. Not regconized!\n", ParallelOSD.this.getName(), payload.toString(), EventQueue.Now());
