@@ -125,6 +125,7 @@ public class OSD extends Node{
 							new CephPacket(s_array[0] + ",ECDATA", ec_data_size)), false);
 				}
 				process_delay = payload.getSizeInBits() / EC_ENCODE_MBitPS_/ ISerializableHelper.MBIT
+						+ ec_data_size / DISK_BANDWIDTH_MBitPS / ISerializableHelper.MBIT
 						+ CONSTANT_WRITE_DELAY;
 				break;
 			case "ECDATA":

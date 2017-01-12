@@ -51,15 +51,30 @@ public class SimpleCrush {
 
 	}
 	public static List<List<String>> Crush(HashMap<String, OSD> osds, int numofPG, int groupsize){
-		
+
 		PGs = new int[numofPG];
 		DefaultMap = new HashMap<Integer, List<String>>();
-		
+
 		List<String> input = new ArrayList<String>();
 		for(Map.Entry<String, OSD> entry : osds.entrySet() ){
 			input.add(entry.getKey());
 		}
-		
+
+
+		List<List<String>> all_result = Permutation(input, groupsize);
+		return all_result;
+	}
+
+	public static List<List<String>> ParallelCrush(HashMap<String, ParallelOSD> osds, int numofPG, int groupsize){
+
+		PGs = new int[numofPG];
+		DefaultMap = new HashMap<Integer, List<String>>();
+
+		List<String> input = new ArrayList<String>();
+		for(Map.Entry<String, ParallelOSD> entry : osds.entrySet() ){
+			input.add(entry.getKey());
+		}
+
 
 		List<List<String>> all_result = Permutation(input, groupsize);
 		return all_result;
@@ -157,15 +172,15 @@ public class SimpleCrush {
 		new_list.addAll(s);
 		return new_list;
 	}
-	
+
 	public static List<List<String>> Permutation(List<String> original, int group_size){
-		
+
 		List<List<String>> ret = new ArrayList<>();
 		innerPermutation(original, new ArrayList<>(), ret, group_size);
 		return ret;
-		
+
 	}
-	
+
 	private static void innerPermutation(List<String> original, List<String> target, List<List<String>> result, int remaining) {
 		if (remaining == 0) {
 			List<String> tmp = new ArrayList<>(target);
@@ -185,15 +200,15 @@ public class SimpleCrush {
 	public static void  main(String[] args){
 
 
-		
-//		List<String> ls  = new ArrayList<String>();
-//		ls.add("1");
-//		ls.add("2");
-//		ls.add("3");
-//		ls.add("4");
-//		
-//		List<List<String>> result = Permutation(ls, 3);
-		
+
+		//		List<String> ls  = new ArrayList<String>();
+		//		ls.add("1");
+		//		ls.add("2");
+		//		ls.add("3");
+		//		ls.add("4");
+		//		
+		//		List<List<String>> result = Permutation(ls, 3);
+
 		int num_of_osd = 10;
 		int num_of_PG = 100;
 		HashMap<String, OSD> osds = new HashMap<String, OSD>();
@@ -209,9 +224,9 @@ public class SimpleCrush {
 			System.out.println(pair.getKey() + " = " +item.toString());
 			it.remove(); // avoids a ConcurrentModificationException
 		}
-	
 
-		
+
+
 	}
 
 
