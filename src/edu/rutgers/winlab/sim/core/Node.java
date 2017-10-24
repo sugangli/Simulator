@@ -5,6 +5,13 @@ import java.util.HashMap;
 public abstract class Node {
 	
 	private HashMap<Node, LinkState> Neighbors = new HashMap<Node, LinkState>();
+	public HashMap<Node, LinkState> getNeighbors() {
+		return Neighbors;
+	}
+
+	public void setNeighbors(HashMap<Node, LinkState> neighbors) {
+		Neighbors = neighbors;
+	}
 	private String Name;
 	private final static double BANDWIDTH_MBPS = 1500;
 	private EventHandlerQueue<MACPacket> incomingQueue;
