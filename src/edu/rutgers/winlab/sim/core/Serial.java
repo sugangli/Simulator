@@ -138,35 +138,4 @@ public class Serial<T> {
     	EventQueue.Run();
     }
     
-//    private void ScheduleNextEvent(){
-//    	if(_events.size() > 0){
-//    		
-//    		SerialEventDataStructure seds = _events.get(0);
-//    		double nextEventTime = EventQueue.Now() + seds.getE().getDelay();
-//    		_events.remove(0);
-//    		Object[] args = {this, seds.getParameter()};
-//    		System.out.printf("ScheduleNextEvent(): now:%f %s %s", EventQueue.Now(), seds.getE(), seds.getParameter());
-//    		EventQueue.AddEvent(nextEventTime, seds.getE(), args);
-//    		ScheduleNextEvent();
-//    		
-//    	}else{
-//    		
-//    		if(_lastEvents.size() > 0){
-//    			
-//    			SerialEventDataStructure seds = _lastEvents.get(0);
-//    			double nextEventTime = EventQueue.Now() + seds.getE().getDelay();
-//    			_lastEvents.remove(0);
-//    			System.out.printf("ScheduleNextEvent(): now:%f %s %s", EventQueue.Now(), seds.getE(), seds.getParameter());
-//    			EventQueue.AddEvent(nextEventTime, seds.getE(), seds.getParameter());
-//    			ScheduleNextEvent();
-//    			
-//    		}else{
-//    			SerialFinished();
-//    		}
-//    		
-//    	}
-//    	
-//    	
-//    	
-//    }
 }

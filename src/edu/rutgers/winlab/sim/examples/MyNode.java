@@ -65,7 +65,6 @@ public class MyNode extends Node{
 		Node.AddNodeLink(n1, n2, 0);
 		Node.AddNodeLink(n1, n3, 0);
 		n1.sendPacket(new MACPacket(n1, n2, new MyData("aa")), false);
-//		n2.sendPacket(new MACPacket(n2, n1, new MyData("aa")), false);
 		n1.sendPacket(new MACPacket(n1, n3, new MyData("aa")), false);
 		EventQueue.Run();
 	}

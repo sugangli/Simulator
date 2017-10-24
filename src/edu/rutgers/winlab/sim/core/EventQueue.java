@@ -139,23 +139,13 @@ public class EventQueue {
 
 	public static void main(String[] args) {
 		
-//		LinkedList<Integer> test = new LinkedList<>();
-//		test.add(1);
-//		test.add(2);
-//		test.add(3);
-//ListIterator<Integer> li = test.listIterator();
-//System.out.println(li.next());
-//li.previous();
-//System.out.println(li.next());
-//System.out.println(li.next());
-//System.out.println(li.next());
-//System.out.println(li.next());
+
+
 		
 		EventQueue.AddEvent(EventQueue.Now() + EventQueue.MILLI_SECOND, Test1, 5);
 		EventQueue.AddEvent(EventQueue.Now() + EventQueue.MILLI_SECOND, Test2, 5);
 		EventQueue.Run();
-		// System.out.println("[Test1] Now: " + EventQueue.Now() + " val: " +
-		// 1);
+		
 
 	}
 

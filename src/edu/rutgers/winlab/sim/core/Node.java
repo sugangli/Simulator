@@ -132,13 +132,13 @@ public abstract class Node {
 			double receiveTime = EventQueue.Now() + sendTime;
 			if(parameter.To == null){
 				for(HashMap.Entry<Node, LinkState> entry: Neighbors.entrySet()){
-//					System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
+					System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
 					EventQueue.AddEvent(receiveTime + entry.getValue().getDelay(), 
 							entry.getKey().enqueueIncomingPacketAction, parameter);
 				}
 			}else{
 				LinkState ls = Neighbors.get(parameter.To);
-//				System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
+				System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
 				EventQueue.AddEvent(receiveTime + ls.Delay, parameter.To.enqueueIncomingPacketAction, parameter);
 			}
 			return sendTime;
@@ -153,6 +153,7 @@ public abstract class Node {
 	}
 	
 	public void sendPacket(MACPacket packet, boolean isPrioritized) {
+		System.out.println("Node.sendPacket.outgoingQueue.Enqueue");
 		outgoingQueue.Enqueue(packet, isPrioritized);
 	}
 	
