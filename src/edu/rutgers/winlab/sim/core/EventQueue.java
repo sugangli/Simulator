@@ -1,8 +1,10 @@
 package edu.rutgers.winlab.sim.core;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.PriorityQueue;
 
 public class EventQueue {
 
@@ -12,7 +14,9 @@ public class EventQueue {
 
 	private static EventQueue Default = new EventQueue();
 
-	private LinkedList<Event> events = new LinkedList<Event>();
+	//	private LinkedList<Event> events = new LinkedList<Event>();
+	private EvenComparator ec = new EvenComparator();
+	private PriorityQueue<Event> events  = new PriorityQueue<Event>(100, ec);
 	private double now;
 
 	public double getNow() {
@@ -45,38 +49,20 @@ public class EventQueue {
 		return Default.getNow();
 	};
 
-	private void run() {
-
-		while (!events.isEmpty()) {
-
-			Event e = events.getFirst();
-//			System.out.printf("run() now:%f%s\n", e.Time, e.action);
-			now = e.Time;
-			e.DoEvent();
-			events.removeFirst();
-
-		}
-
-	}
-
-	private void addEvent(double time, Action action, Object... args) {
-
+	private void addEvent(double time, Action action, Object...args) {
 		assert time >= now;
 		Event e = new Event(time, action, args);
-			ListIterator<Event> iterator =  events.listIterator();
-			while(iterator.hasNext()) {
-				Event ex = iterator.next();
-				if (ex.Time > time) {
-					iterator.previous();
-					iterator.add(e);
-					e = null;
-					break;
-				}
-			}
-			if (e != null)
-				iterator.add(e);
-
+		events.add(e);
 	}
+
+	private void run() {
+		while(! events.isEmpty()) {
+			Event e = events.poll();
+			now = e.Time;
+			e.DoEvent();
+		}
+	}
+
 
 	private void reset() {
 
@@ -137,15 +123,23 @@ public class EventQueue {
 
 	};
 
+	public class EvenComparator implements Comparator<Event>{
+
+		@Override
+		public int compare(Event event_A, Event event_B) {
+			// TODO Auto-generated method stub
+			double result = event_A.Time - event_B.Time;
+			return (result > 0)?1:-1;
+		}
+
+	}
+
 	public static void main(String[] args) {
-		
 
-
-		
 		EventQueue.AddEvent(EventQueue.Now() + EventQueue.MILLI_SECOND, Test1, 5);
 		EventQueue.AddEvent(EventQueue.Now() + EventQueue.MILLI_SECOND, Test2, 5);
 		EventQueue.Run();
-		
+
 
 	}
 
