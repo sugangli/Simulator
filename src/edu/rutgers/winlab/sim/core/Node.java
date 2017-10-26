@@ -13,7 +13,14 @@ public abstract class Node {
 		Neighbors = neighbors;
 	}
 	private String Name;
-	private final static double BANDWIDTH_MBPS = 1500;
+	private double Bandwidth_MBPS = 1500;
+	public double getBandwidth_MBPS() {
+		return Bandwidth_MBPS;
+	}
+
+	public void setBandwidth_MBPS(double bandwidth_MBPS) {
+		Bandwidth_MBPS = bandwidth_MBPS;
+	}
 	private EventHandlerQueue<MACPacket> incomingQueue;
 	private EventHandlerQueue<MACPacket> outgoingQueue;
 	private Serial.SerialAction<MACPacket> processPacket;
@@ -139,13 +146,13 @@ public abstract class Node {
 			double receiveTime = EventQueue.Now() + sendTime;
 			if(parameter.To == null){
 				for(HashMap.Entry<Node, LinkState> entry: Neighbors.entrySet()){
-					System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
+//					System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
 					EventQueue.AddEvent(receiveTime + entry.getValue().getDelay(), 
 							entry.getKey().enqueueIncomingPacketAction, parameter);
 				}
 			}else{
 				LinkState ls = Neighbors.get(parameter.To);
-				System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
+//				System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
 				EventQueue.AddEvent(receiveTime + ls.Delay, parameter.To.enqueueIncomingPacketAction, parameter);
 			}
 			return sendTime;
@@ -160,7 +167,7 @@ public abstract class Node {
 	}
 	
 	public void sendPacket(MACPacket packet, boolean isPrioritized) {
-		System.out.println("Node.sendPacket.outgoingQueue.Enqueue");
+//		System.out.println("Node.sendPacket.outgoingQueue.Enqueue");
 		outgoingQueue.Enqueue(packet, isPrioritized);
 	}
 	
@@ -169,13 +176,13 @@ public abstract class Node {
 	}
 	
 	public double GetSendTimeInSeconds(ISerializable packet){
-		return packet.getSizeInBits() / BANDWIDTH_MBPS / ISerializableHelper.MBIT;
+		return packet.getSizeInBits() / Bandwidth_MBPS / ISerializableHelper.MBIT;
 	}
 	private Action enqueueIncomingPacketAction = new Action() {
 		@Override
-		public double execute(Object... args){
+		public void execute(Object... args){
 			incomingQueue.Enqueue((MACPacket)args[0], false);
-			return 0;
+			return;
 		}
 
 	};

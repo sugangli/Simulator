@@ -96,12 +96,12 @@ public class EventQueue {
 	public static Action Test1 = new Action() {
 
 		@Override
-		public double  execute(Object... args) {
+		public void  execute(Object... args) {
 			Integer val = (Integer) args[0];
 			System.out.printf("[Test1] Now: %f val: %d\n", EventQueue.Now(), val);
 			if (val.intValue() > 0)
 				EventQueue.AddEvent(EventQueue.Now(), Test1, val - 1);
-			return 0;
+			return;
 		}
 
 	};
@@ -109,7 +109,7 @@ public class EventQueue {
 	public static Action Test2 = new Action() {
 
 		@Override
-		public double execute(Object... args) {
+		public void execute(Object... args) {
 			Integer val = (Integer) args[0];
 			System.out.printf("[Test2] Now: %f val: %d\n", EventQueue.Now(), val);
 			if (val > 0)
@@ -117,7 +117,7 @@ public class EventQueue {
 			else
 				EventQueue.AddEvent(EventQueue.Now() + EventQueue.MILLI_SECOND, Test1, val + 5);
 
-			return 0;
+			return;
 		}
 
 

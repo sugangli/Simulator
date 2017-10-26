@@ -1,121 +1,53 @@
 package edu.rutgers.winlab.sim.core;
 
+
 public class TimeoutEventDispatcher {
 
-	private long timeouttime;
-	private boolean active;
-	private TimeoutHandle timeouthandle;
-	private Object[] args;
-	private TimeoutHandle th;
-	private Action action;
-	public TimeoutEventDispatcher ted;
+    private double _timeoutTime;
+    private boolean _active;
+    private final Object[] _args;
+    private final Action _action;
 
-	public double getTimeoutTime() {
-		return timeouttime;
-	};
+    public TimeoutEventDispatcher(double timeouttime, Action action, Object... args) {
+        this._timeoutTime = timeouttime;
+        this._args = args;
+        this._active = true;
+        this._action = action;
+        EventQueue.AddEvent(timeouttime, this::_timeout);
+    }
 
-	public void setTimeoutTime(long timeouttime) {
-		this.timeouttime = timeouttime;
-	};
+    public double getTimeoutTime() {
+        return _timeoutTime;
+    }
 
-	public boolean getActive() {
-		return active;
-	};
+    public boolean isActive() {
+        return _active;
+    }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	};
+    public void delay(double newTime) {
+        if (newTime <= this._timeoutTime) {
+            throw new IllegalArgumentException(String.format("NewTime(%d) <= TimeoutTime(%d)", newTime, _timeoutTime));
+        }
+        this._timeoutTime = newTime;
+    }
 
-	public TimeoutEventDispatcher(long timeouttime, Action action, Object... args) {
+    public void cancel() {
+        this._active = false;
+    }
 
-		this.timeouttime = timeouttime;
-		this.args = args;
-		this.active = true;
-		this.action = action;
-
-		EventQueue.AddEvent(timeouttime, new TimeoutHandle());
-
-	}
-
-	public void Delay(long newtime) {
-
-		assert newtime > this.timeouttime;
-		this.timeouttime = newtime;
-
-	}
-
-	public void Cancel() {
-
-		this.active = false;
-
-	}
-
-	private class TimeoutHandle extends Action {
-
-		@Override
-		public double execute(Object... args) {
-			if (!active)
-				return 0;
-			if (timeouttime == EventQueue.Now()) {
-				System.out.println("It's Now ! timeoutime :" + timeouttime);
-				action.execute(TimeoutEventDispatcher.this.args);
-				active = false;
-
-			} else {
-
-				System.out.println("Set timeoutime :" + timeouttime);
-				EventQueue.AddEvent(timeouttime, this);
-
-			}
-			return 0;
-
-		}
-
-	}
-
-
-	
-	public static class TestAction extends Action {
-		@Override
-		public double execute(Object... args) {
-			Integer val = 0;
-			System.out.printf("[%f] Timeout! Test %d\n", EventQueue.Now(), val);
-			return 0;
-		}
-
-	}
-	
-	
-
-	public static void main(String[] args) {
-		TimeoutEventDispatcher ted;
-//		// TimeoutAction toa = new TimeoutAction((Integer) 0);
-//		ted = new TimeoutEventDispatcher(EventQueue.Now() + EventQueue.MILLI_SECOND, new TestAction());
-////		ted.Delay(EventQueue.Now() + 2 * EventQueue.MILLI_SECOND);
-//
-//		// TimeoutAction1 toa1 = new TimeoutAction1((Integer) 1);
-//		EventQueue.AddEvent(EventQueue.Now() + 1.5 * EventQueue.MILLI_SECOND, new Action() {
-//			@Override
-//			public void execute(Object... args) {
-//				Integer val = 1;
-//				System.out.printf("[%f] Timeout! Test2 %d\n", EventQueue.Now(), val);
-//				ted.Delay(EventQueue.Now() + 2 * EventQueue.MILLI_SECOND);
-//			}
-//		});
-////
-////		// TimeoutAction2 toa2 = new TimeoutAction2((Integer) 2);
-//		EventQueue.AddEvent(EventQueue.Now() + 3499 * EventQueue.MILLI_SECOND, new Action() {
-//			@Override
-//			public void execute(Object... args) {
-//				Integer val = 2;
-//				System.out.printf("[%f] Cancel it! Test 3%d\n", EventQueue.Now(), val);
-//				ted.Cancel();
-//			}
-//
-//		});
-//
-//		EventQueue.Run();
-
-	}
+    private void _timeout(Object... args) {
+        if (!_active) {
+            System.out.printf("[%d] Cancelled!%n", EventQueue.Now());
+            return;
+        }
+        if (_timeoutTime == EventQueue.Now()) {
+            System.out.printf("[%d] It's Now ! timeoutime :%d%n", EventQueue.Now(), _timeoutTime);
+            _action.execute(_args);
+            _active = false;
+        } else {
+            System.out.printf("[%d] Set timeoutime : %d%n", EventQueue.Now(), _timeoutTime);
+            EventQueue.AddEvent(_timeoutTime, this::_timeout);
+        }
+    }
 
 }

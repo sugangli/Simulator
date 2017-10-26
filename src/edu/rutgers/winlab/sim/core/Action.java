@@ -1,12 +1,9 @@
 package edu.rutgers.winlab.sim.core;
 
-public abstract class Action {
+public interface Action {
 	
-	public Action(Object... args){
-		
-	}
-
-	public abstract double execute(Object... args);
+	
+	public abstract void execute(Object... args);
 	
 	
 

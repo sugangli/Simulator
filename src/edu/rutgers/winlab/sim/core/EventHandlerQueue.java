@@ -24,14 +24,14 @@ public class EventHandlerQueue<T> {
 		Busy = false;
 	}
 	
-	public class HandleItemAction extends Action{
+	public class HandleItemAction implements Action{
 		
 		@Override
-		public double execute(Object... args){
+		public void execute(Object... args){
 			if(InnerQueue.getSize() == 0){
 //				System.out.println("InnerQueue.getSize == 0");
 				Busy = false;
-				return 0;
+				return;
 			}
 //			System.out.println("InnerQueue.getSize != 0");
 			T item = InnerQueue.GetData();
@@ -39,15 +39,15 @@ public class EventHandlerQueue<T> {
 			Action a = new Action() {
 				
 				@Override
-				public double execute(Object... args) {
+				public void execute(Object... args) {
 					EventQueue.AddEvent(EventQueue.Now(), HandleItemAction.this);
-					return 0;
+					return;
 					
 				}
 			};
 			
 			s.AddSerialFinishedHandler(a);
-			return 0;
+			return;
 		}
 
 		

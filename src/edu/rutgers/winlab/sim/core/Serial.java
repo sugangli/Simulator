@@ -69,7 +69,7 @@ public class Serial<T> {
     private Action RunEventAction = new Action() {
 
 		@Override
-		public double execute(Object... args) {
+		public void execute(Object... args) {
 			if(_events.size() > 0){
 	    		
 	    		SerialEventDataStructure seds = _events.get(0);
@@ -95,7 +95,7 @@ public class Serial<T> {
 	    		}
 	    		
 	    	}
-			return 0;
+			return;
 			
 		}
 

@@ -55,7 +55,7 @@ public class MyNode extends Node{
 				return 1454 * ISerializableHelper.BYTE/8  - MACPacket.MAC_PACKET_HEADER_SIZE;
 			}
 			
-		}
+	}
 
 	
 	public static void main(String[] args){
