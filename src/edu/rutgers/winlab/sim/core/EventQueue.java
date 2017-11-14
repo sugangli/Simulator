@@ -38,6 +38,10 @@ public class EventQueue {
 		Default.run();
 
 	}
+	
+	public static void RunSeconds(double duration) {
+		Default.runSeconds(duration);
+	}
 
 	public static void Reset() {
 
@@ -57,6 +61,14 @@ public class EventQueue {
 
 	private void run() {
 		while(! events.isEmpty()) {
+			Event e = events.poll();
+			now = e.Time;
+			e.DoEvent();
+		}
+	}
+	
+	private void runSeconds(double duration) {
+		while(! events.isEmpty() && getNow() < duration) {
 			Event e = events.poll();
 			now = e.Time;
 			e.DoEvent();

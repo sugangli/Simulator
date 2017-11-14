@@ -1,6 +1,6 @@
 package edu.rutgers.winlab.sim.aggregation;
 
-import edu.rutgers.winlab.sim.aggregation.Aggregator.AggregatedData;
+import edu.rutgers.winlab.sim.aggregation.ComputeNode.AggregatedData;
 import edu.rutgers.winlab.sim.core.EventQueue;
 import edu.rutgers.winlab.sim.core.MACPacket;
 import edu.rutgers.winlab.sim.core.Node;
@@ -13,8 +13,8 @@ public class Server extends Node {
 
 		@Override
 		public double execute(Serial<MACPacket> s, MACPacket parameter) {
-			Payload data = (Payload)parameter.getMacpayload();
-			System.out.printf("Node=%s Now=%f Packet=%s%n", Server.this, EventQueue.Now(), parameter);
+			AggregatedData data = (AggregatedData)parameter.getMacpayload();
+			System.out.printf("Now=%f Node=%s Packet=%s%n",EventQueue.Now(), Server.this, parameter);
 			if (data == null) return 0;
 			return 0;
 		}

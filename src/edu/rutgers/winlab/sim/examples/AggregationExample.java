@@ -1,7 +1,7 @@
 package edu.rutgers.winlab.sim.examples;
 
-import edu.rutgers.winlab.sim.aggregation.Aggregator;
-import edu.rutgers.winlab.sim.aggregation.Aggregator.AggregatedData;
+import edu.rutgers.winlab.sim.aggregation.ComputeNode;
+import edu.rutgers.winlab.sim.aggregation.ComputeNode.AggregatedData;
 import edu.rutgers.winlab.sim.aggregation.MappingTable;
 import edu.rutgers.winlab.sim.core.EventQueue;
 import edu.rutgers.winlab.sim.core.ISerializableHelper;
@@ -55,7 +55,9 @@ public class AggregationExample {
 	public static void main(String[] args) {
 		TestNode n1 = new TestNode("n1");
 		TestNode n2 = new TestNode("n2");
-		Aggregator a1 = new Aggregator("a1", 0.5 * EventQueue.MILLI_SECOND);
+		ComputeNode a1 = new ComputeNode("a1", 0.5 * EventQueue.MILLI_SECOND);
+		a1.setSelected(true);
+		a1.initNode();
 		TestNode n3 = new TestNode("n3");
 		
 		Node.AddNodeLink(n1, a1, 0);
@@ -64,12 +66,12 @@ public class AggregationExample {
 		
 		MappingTable.Insert(a1, n3);
 		
-		for(int i = 0; i < 1000; i++) {
-			n1.sendPacket(new MACPacket(n1, a1, new Aggregator.AggregatedData("1,100")), false);
+		for(int i = 0; i < 1; i++) {
+			n1.sendPacket(new MACPacket(n1, a1, new ComputeNode.AggregatedData(n1.getName() + "," + a1.getName() + ",1,100")), false);
 		}
 		
-		for(int i = 0; i < 2000; i++) {
-			n2.sendPacket(new MACPacket(n2, a1, new Aggregator.AggregatedData("1,200")), false);
+		for(int i = 0; i < 1; i++) {
+			n2.sendPacket(new MACPacket(n2, a1, new ComputeNode.AggregatedData(n2.getName() + "," + a1.getName() + ",1,100")), false);
 		}
 		EventQueue.Run();
 		return;

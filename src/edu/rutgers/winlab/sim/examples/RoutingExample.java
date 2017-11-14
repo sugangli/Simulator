@@ -6,6 +6,7 @@ import java.util.HashMap;
 import edu.rutgers.winlab.sim.aggregation.AccessPoint;
 import edu.rutgers.winlab.sim.aggregation.Dijkstra;
 import edu.rutgers.winlab.sim.aggregation.Router;
+import edu.rutgers.winlab.sim.aggregation.RoutingPayload;
 import edu.rutgers.winlab.sim.aggregation.Server;
 import edu.rutgers.winlab.sim.aggregation.Dijkstra.DijkstraResult;
 import edu.rutgers.winlab.sim.core.EventQueue;
@@ -46,8 +47,8 @@ public class RoutingExample {
         	
         }
 		
-		ap1.sendPacket(new MACPacket(ap1, map.get("r1"), new Router.RoutingPayload("ap1,s1,100")), false);
-		ap2.sendPacket(new MACPacket(ap2, map.get("r4"), new Router.RoutingPayload("ap2,s1,200")), false);
+		ap1.sendPacket(new MACPacket(ap1, map.get("r1"), new RoutingPayload("ap1,s1,100")), false);
+		ap2.sendPacket(new MACPacket(ap2, map.get("r4"), new RoutingPayload("ap2,s1,200")), false);
 		EventQueue.Run();
 		return;
 	}

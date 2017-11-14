@@ -11,7 +11,7 @@ import edu.rutgers.winlab.sim.core.Serial;
 
 public class Router extends Node {
 
-	private final HashMap<String, HashSet<Node>> routingTable;
+	private HashMap<String, HashSet<Node>> routingTable;
 	public Router(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub
@@ -38,25 +38,7 @@ public class Router extends Node {
             nextHops.remove(nextHop);
         }
     }
-	public static class RoutingPayload extends Payload{
-
-		public RoutingPayload(String val) {
-			super(val);
-			// TODO Auto-generated constructor stub
-		}
-		
-		public String getSrc() {
-			String[] sc = getVal().split(",");
-			return sc[0];
-		}
-		
-		public String getDst() {
-			String[] sc = getVal().split(",");
-			return sc[1];
-		}
-		
-		
-	}
+	
 	private Serial.SerialAction<MACPacket> routingPacket = new Serial.SerialAction<MACPacket>() {
 
 		@Override

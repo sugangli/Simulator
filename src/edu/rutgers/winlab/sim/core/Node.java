@@ -152,7 +152,7 @@ public abstract class Node {
 				}
 			}else{
 				LinkState ls = Neighbors.get(parameter.To);
-//				System.out.println("innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
+//				System.out.println("NextHop Found!innerSendPacketAction:EventQueue.AddEvent.EnqueueIncomingPacketAction");
 				EventQueue.AddEvent(receiveTime + ls.Delay, parameter.To.enqueueIncomingPacketAction, parameter);
 			}
 			return sendTime;
@@ -181,6 +181,7 @@ public abstract class Node {
 	private Action enqueueIncomingPacketAction = new Action() {
 		@Override
 		public void execute(Object... args){
+//			System.out.println("enqueueIncomingPacketAction");
 			incomingQueue.Enqueue((MACPacket)args[0], false);
 			return;
 		}
