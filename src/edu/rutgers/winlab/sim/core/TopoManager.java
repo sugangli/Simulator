@@ -118,7 +118,7 @@ public class TopoManager {
 			}
 			
 			if(ap_map.containsKey(parts[0]) && cnodemap.containsKey(c_name)) {
-				Node.AddNodeLink(ap_map.get(parts[0]), cnodemap.get(c_name), 10);
+				Node.AddNodeLink(ap_map.get(parts[0]), cnodemap.get(c_name), 0.01);
 			}
 			
 			
