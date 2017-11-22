@@ -12,13 +12,13 @@ import edu.rutgers.winlab.sim.core.Node;
 
 public class AccessPoint extends Node {
 	double dataRate = 0;
-	ComputeNode first_anode;
+	Node first_anode;
 
-	public ComputeNode getFirstANode() {
+	public Node getFirstANode() {
 		return first_anode;
 	}
 
-	public void setFirstANnode(ComputeNode first_anode) {
+	public void setFirstANnode(Node first_anode) {
 		this.first_anode = first_anode;
 	}
 

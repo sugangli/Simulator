@@ -131,6 +131,9 @@ public class ComputeNode extends Node {
 			String newdata = Compute(datalist);
 			String dst = MappingTable.getDestination(ComputeNode.this).getName();
 			HashSet<Node> nextHops = ComputeNode.this.routingTable.get(dst);
+			if(nextHops == null || nextHops.size() == 0) {
+				System.err.println("Error: No next hop found for this Compute Node" + ComputeNode.this.getName());
+			}
 			for(Node n: nextHops) {
 				MACPacket new_packet = new MACPacket(ComputeNode.this, n, new AggregatedData(ComputeNode.this.getName() + "," + dst + "," + oid + "," + newdata));;
 				ComputeNode.this.sendPacket(new_packet, false);
@@ -177,7 +180,7 @@ public class ComputeNode extends Node {
 						ComputeNode.this.sendPacket(newpacket, false);
 					}
 				}else {
-					System.out.printf("Error: No next hop found at Node=%s", ComputeNode.this);
+					System.err.printf("Error: No next hop found at Node=%s", ComputeNode.this);
 				}
 				return 0;
 			}

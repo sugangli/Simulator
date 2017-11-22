@@ -13,15 +13,15 @@ import java.util.Map;
 import edu.rutgers.winlab.sim.aggregation.AccessPoint;
 import edu.rutgers.winlab.sim.aggregation.ComputeNode;
 import edu.rutgers.winlab.sim.aggregation.Dijkstra;
+import edu.rutgers.winlab.sim.aggregation.MappingTable;
 import edu.rutgers.winlab.sim.aggregation.Server;
 import edu.rutgers.winlab.sim.aggregation.Dijkstra.DijkstraResult;
-import edu.rutgers.winlab.sim.aggregation.MappingTable;
 import edu.rutgers.winlab.sim.algorithm.KMediods;
 import edu.rutgers.winlab.sim.core.EventQueue;
 import edu.rutgers.winlab.sim.core.Node;
 import edu.rutgers.winlab.sim.core.TopoManager;
 
-public class AggregationSimulationKMed {
+public class AggregationSimulationRandom {
 	protected static PrintStream outputFile(String name) throws FileNotFoundException {
 		return new PrintStream(new BufferedOutputStream(new FileOutputStream(name)), true);
 	}
@@ -45,9 +45,9 @@ public class AggregationSimulationKMed {
 				for(Map.Entry<String, AccessPoint> entry: ap_map.entrySet()) {
 					entry.getValue().setDataRate(10);
 				}
-				System.setOut(outputFile(args[2] + "_resultTrace" + f.getName()));
+				System.setOut(outputFile(args[2] + "_resultTraceRandom" + f.getName()));
 				
-				KMediods.AssignFirstHops(ap_map, cnodemap, Integer.parseInt(args[2]), false, 40);
+				KMediods.AssignFirstHopsRandom(ap_map, cnodemap, Integer.parseInt(args[2]), false, 40);
 
 				//Init the Server Node
 				Server server_node = new Server("s1");
@@ -100,7 +100,4 @@ public class AggregationSimulationKMed {
 
 
 	}
-
-
-
 }
