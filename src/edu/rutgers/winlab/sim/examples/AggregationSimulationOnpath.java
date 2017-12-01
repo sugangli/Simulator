@@ -6,11 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import edu.rutgers.winlab.sim.aggregation.AccessPoint;
 import edu.rutgers.winlab.sim.aggregation.ComputeNode;
@@ -29,8 +26,8 @@ public class AggregationSimulationOnpath {
 	}
 
 	public static void main(String[] args) throws IOException {
-		if(args == null || args.length != 3) {
-			System.err.println("Usage: java -jar *.jar <compute nodes topo> <aps trace folder> <# of aggregators>");
+		if(args == null || args.length != 4) {
+			System.err.println("Usage: java -jar *.jar <compute nodes topo> <aps trace folder> <# of aggregators> <timeout in second>");
 		}else {
 
 			String filename = args[0];
@@ -48,7 +45,7 @@ public class AggregationSimulationOnpath {
 					entry.getValue().setDataRate(10);
 				}
 				
-				System.setOut(outputFile(args[2] + "_resultTraceOnpath" + f.getName()));
+				System.setOut(outputFile(args[3] + "_" + args[2] + "_resultTraceOnpath" + f.getName()));
 
 				
 				int k = Integer.parseInt(args[2]);
@@ -102,7 +99,7 @@ public class AggregationSimulationOnpath {
 				//Init all CNodes
 				for(Map.Entry<String, ComputeNode> entry: cnodemap.entrySet()) {
 					entry.getValue().initNode();
-					entry.getValue().setTimeout(0.5);
+					entry.getValue().setTimeout(Double.parseDouble(args[3]));
 					MappingTable.Insert(entry.getValue(), server_node);
 				}
 				

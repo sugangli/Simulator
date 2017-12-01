@@ -27,8 +27,8 @@ public class AggregationSimulationRandom {
 	}
 
 	public static void main(String[] args) throws IOException {
-		if(args == null || args.length != 3) {
-			System.err.println("Usage: java -jar *.jar <compute nodes topo> <aps trace folder> <# of aggregators>");
+		if(args == null || args.length != 4) {
+			System.err.println("Usage: java -jar *.jar <compute nodes topo> <aps trace folder> <# of aggregators> <timeout in second>");
 		}else {
 
 			String filename = args[0];
@@ -45,7 +45,7 @@ public class AggregationSimulationRandom {
 				for(Map.Entry<String, AccessPoint> entry: ap_map.entrySet()) {
 					entry.getValue().setDataRate(10);
 				}
-				System.setOut(outputFile(args[2] + "_resultTraceRandom" + f.getName()));
+				System.setOut(outputFile(args[3] + "_" +args[2] + "_resultTraceRandom" + f.getName()));
 				
 				KMediods.AssignFirstHopsRandom(ap_map, cnodemap, Integer.parseInt(args[2]), false, 40);
 
@@ -60,7 +60,7 @@ public class AggregationSimulationRandom {
 				//insert routing table for route to aggregation points
 				for(Map.Entry<ComputeNode, ArrayList<AccessPoint>> entry: KMediods.getAssignmentmap().entrySet()) {
 					entry.getKey().initNode();
-					entry.getKey().setTimeout(0.5);
+					entry.getKey().setTimeout(Double.parseDouble(args[3]));
 					for (DijkstraResult dij: Dijkstra.CalculateShortestPaths(entry.getKey())){
 						//		        	System.out.printf("%s next hop = %s, weight = %f\n", dij.From.toString(), dij.NextHop.toString(), dij.Weight);;
 						ComputeNode computenode;

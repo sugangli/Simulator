@@ -20,6 +20,17 @@ class DataSummary(object):
 		if len(sumlist) != 0:
 			return sum(sumlist)/len(sumlist)
 		return -1
+	def getAllDelay(self, nodename):
+		sumlist = []
+		for line in self.content:
+			stringlist = line.split()
+			if nodename in stringlist[1]:
+				nowstrings = stringlist[0].split("=")
+				now = float(nowstrings[1])
+				laststring = stringlist[-1].replace("}", "").split(",")
+				sent_time = float(laststring[-1])
+				sumlist.append(now - sent_time)
+		return sumlist
 
 	def getMaxDelay(self):
 		max_delay = -1
