@@ -42,10 +42,10 @@ class TopoGenerator(object):
 
 
 if __name__ == '__main__':
-	r = 20
-	c = 20
+	r = 18
+	c = 18
 	ap_per_node = 6
 	tg = TopoGenerator(r,c)
-	tg.TopoGenerate("data/topo_" + str(r) + "x" + str(c) +".txt")
-	tg.APGenerate(ap_per_node, "data/ap_topo_" + str(ap_per_node) + "_per_node_" + str(r) + "x" + str(c)+ ".txt")
+	tg.TopoGenerate("../data/topo_" + str(r) + "x" + str(c) +".txt")
+	# tg.APGenerate(ap_per_node, "data/ap_topo_" + str(ap_per_node) + "_per_node_" + str(r) + "x" + str(c)+ ".txt")
 

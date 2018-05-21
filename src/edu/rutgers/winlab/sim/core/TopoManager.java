@@ -100,26 +100,27 @@ public class TopoManager {
 		BufferedReader br = new BufferedReader(new FileReader(inputfile));
 		while((line = br.readLine()) != null) {
 			String[] parts  = line.split("\t");
-			if(!ap_map.containsKey("ap"+parts[0])){
-				AccessPoint r = new AccessPoint("ap" + parts[0]);
-				r.setBandwidth_MBPS(Double.parseDouble(parts[1]));
-				r.setDataRate(Double.parseDouble(parts[2]));
-				ap_map.put(parts[0], r);
-			}
-			String[] cor = parts[3].split(",");
-			int index = Integer.parseInt(cor[0]) * grid_size + Integer.parseInt(cor[1]);
-			String c_name = "c"+index;
-			if(!cnodemap.containsKey(c_name)){
-				ComputeNode r = new ComputeNode(c_name);
-				r.setBandwidth_MBPS(1500);
-				cnodemap.put(c_name, r);
-			}
-			
-			if(ap_map.containsKey(parts[0]) && cnodemap.containsKey(c_name)) {
-				Node.AddNodeLink(ap_map.get(parts[0]), cnodemap.get(c_name), 0.01);
-			}
-			
-			
+			double datarate  = Double.parseDouble(parts[2]);
+			if(datarate != 0) {
+				if(!ap_map.containsKey("ap"+parts[0])){
+					AccessPoint r = new AccessPoint("ap" + parts[0]);
+					r.setBandwidth_MBPS(Double.parseDouble(parts[1]));
+					r.setDataRate(datarate);
+					ap_map.put(parts[0], r);
+				}
+				String[] cor = parts[3].split(",");
+				int index = Integer.parseInt(cor[0]) * grid_size + Integer.parseInt(cor[1]);
+				String c_name = "c"+index;
+				if(!cnodemap.containsKey(c_name)){
+					ComputeNode r = new ComputeNode(c_name);
+					r.setBandwidth_MBPS(1500);
+					cnodemap.put(c_name, r);
+				}
+				
+				if(ap_map.containsKey(parts[0]) && cnodemap.containsKey(c_name)) {
+					Node.AddNodeLink(ap_map.get(parts[0]), cnodemap.get(c_name), 0.01);
+				}
+			}	
 		}
 		
 		br.close();

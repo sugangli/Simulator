@@ -24,6 +24,48 @@ class BarChart(object):
 			delay = float(strings[2])
 			sum_list.append(delay)
 		return sum(sum_list)/len(sum_list), np.std(sum_list)
+	def getTrafficMeanStdByTime(self):
+		avelist = []
+		stdlist = []
+		sum_list = []
+		prev = -1
+		for line in self.contents:
+			strings = line.split()
+			time = float(strings[0])
+			if prev == -1 or time != prev:
+				prev = time
+				if len(sum_list) != 0:
+					avelist.append(sum(sum_list)/len(sum_list))
+					stdlist.append(np.std(sum_list))
+					sum_list = []
+				
+			traffic = float(strings[2])
+			sum_list.append(traffic)
+		avelist.append(sum(sum_list)/len(sum_list))
+		stdlist.append(np.std(sum_list))
+		return avelist, stdlist
+
+	def getDelayMeanStdByTime(self):
+		avelist = []
+		stdlist = []
+		sum_list = []
+		prev = -1
+		for line in self.contents:
+			strings = line.split()
+			time = float(strings[0])
+			if prev == -1 or time != prev:
+				prev = time
+				if len(sum_list) != 0:
+					avelist.append(sum(sum_list)/len(sum_list))
+					stdlist.append(np.std(sum_list))
+					sum_list = []
+				
+			traffic = float(strings[3])
+			sum_list.append(traffic)
+		avelist.append(sum(sum_list)/len(sum_list))
+		stdlist.append(np.std(sum_list))
+		return avelist, stdlist
+
 
 if __name__ == '__main__':
 	####### on path ########
@@ -118,7 +160,7 @@ if __name__ == '__main__':
 	                 color='b',
 	                 yerr=random_stds,
 	                 error_kw=error_config,
-	                 label='Random')
+	                 label='FirstAssign')
 
 	rects2 = plt.bar(index + bar_width * 2, kmed_means, bar_width,
 	                 alpha=opacity,
@@ -129,11 +171,13 @@ if __name__ == '__main__':
 	font_size = 20
 	tick_size = 15
 	plt.xlabel('# of Aggregators', fontsize = font_size)
-	plt.ylabel('Total Traffic (Pkt #)', fontsize = font_size)
+	plt.ylabel('Traffic (Pkt #)', fontsize = font_size)
 	plt.xticks(index + bar_width, ('4', '8', '16', '32', '64'), fontsize = tick_size)
 	plt.yticks(fontsize = tick_size)
 	plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))
-	plt.legend(fontsize = tick_size)
+	leg = plt.legend(fontsize = 14)
+	if leg:
+	    leg.draggable()
 	plt.grid(axis = 'y')
 	plt.tight_layout()
 	plt.show()

@@ -36,10 +36,11 @@ public class AccessPoint extends Node {
 	}
 	
 	public void generateTrafficByID(int object_id) {
-		PoissonDistribution pd = new PoissonDistribution(this.dataRate);
-		
-		EventQueue.AddEvent(EventQueue.Now(), send_after_interval, pd, object_id);
-		
+		if(this.dataRate > 0) {
+			PoissonDistribution pd = new PoissonDistribution(this.dataRate);
+			
+			EventQueue.AddEvent(EventQueue.Now(), send_after_interval, pd, object_id);
+		}	
 	}
 	
 	private Action send_after_interval = new Action() {
@@ -55,6 +56,9 @@ public class AccessPoint extends Node {
 								+ getFirstANode().getName() + "," + object_id + "," + EventQueue.Now()));;
 					AccessPoint.this.sendPacket(new_packet, false);
 //					System.out.printf("Now=%f Node=%s Packet=%s, occurs=%f%n", EventQueue.Now(), AccessPoint.this, new_packet, occurs);
+					if(1/occurs == 0) {
+						System.err.println("Lost accuracy!!");
+					}
 					EventQueue.AddEvent(EventQueue.Now() + 1/occurs, send_after_interval, pd, object_id);
 				}
 			}	

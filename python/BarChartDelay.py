@@ -97,7 +97,7 @@ if __name__ == '__main__':
 	                 color='b',
 	                 yerr=random_stds,
 	                 error_kw=error_config,
-	                 label='Random')
+	                 label='FirstAssign')
 
 	rects2 = plt.bar(index + bar_width * 2, kmed_means, bar_width,
 	                 alpha=opacity,
@@ -108,7 +108,7 @@ if __name__ == '__main__':
 	font_size = 20
 	tick_size = 15
 	plt.xlabel('# of Aggregators', fontsize = font_size)
-	plt.ylabel('Delay (s)', fontsize = font_size)
+	plt.ylabel('Latency (s)', fontsize = font_size)
 	plt.xticks(index + bar_width, ('4', '8', '16', '32', '64'), fontsize = tick_size)
 	plt.yticks(fontsize = tick_size)
 	plt.ticklabel_format(style='sci', axis='y', scilimits=(0,0))

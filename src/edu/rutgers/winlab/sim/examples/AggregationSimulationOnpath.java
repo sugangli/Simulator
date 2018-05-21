@@ -26,8 +26,8 @@ public class AggregationSimulationOnpath {
 	}
 
 	public static void main(String[] args) throws IOException {
-		if(args == null || args.length != 4) {
-			System.err.println("Usage: java -jar *.jar <compute nodes topo> <aps trace folder> <# of aggregators> <timeout in second>");
+		if(args == null || args.length != 5) {
+			System.err.println("Usage: java -jar *.jar <compute nodes topo> <aps trace folder> <# of aggregators> <timeout in second> <grid size>");
 		}else {
 
 			String filename = args[0];
@@ -39,7 +39,8 @@ public class AggregationSimulationOnpath {
 				String ap_filename = args[1] + "/" + f.getName();
 				System.err.printf("Trace File = %s # of Aggr = %s%n", ap_filename, args[2]);
 				HashMap<String, AccessPoint> ap_map = new HashMap<>();
-				TopoManager.initAPsfromMap(ap_map, cnodemap, 20, ap_filename);
+				int grid_size = Integer.parseInt(args[4]);
+				TopoManager.initAPsfromMap(ap_map, cnodemap, grid_size, ap_filename);
 
 				for(Map.Entry<String, AccessPoint> entry: ap_map.entrySet()) {
 					entry.getValue().setDataRate(10);
@@ -53,7 +54,7 @@ public class AggregationSimulationOnpath {
 				if(k == 4) {
 					for(int i = 0; i < 2; i++) {
 						for(int j = 0; j < 2; j++) {
-							String cname = "c" + (i * 20 + j);
+							String cname = "c" + (i * grid_size  + j);
 							cnodemap.get(cname).setSelected(true);
 						}
 					}
@@ -61,7 +62,7 @@ public class AggregationSimulationOnpath {
 					for(int i = 0; i < 3; i++) {
 						for(int j = 0; j < 3; j++) {
 							if( i != 2 && j != 2) {
-								String cname = "c" + (i * 20 + j);
+								String cname = "c" + (i * grid_size + j);
 								cnodemap.get(cname).setSelected(true);
 							}	
 						}
@@ -70,7 +71,7 @@ public class AggregationSimulationOnpath {
 				}else if(k == 16) {
 					for(int i = 0; i < 4; i++) {
 						for(int j = 0; j < 4; j++) {
-							String cname = "c" + (i * 20 + j);
+							String cname = "c" + (i * grid_size  + j);
 							cnodemap.get(cname).setSelected(true);
 						}
 					}
@@ -79,14 +80,14 @@ public class AggregationSimulationOnpath {
 						for(int j = 0; j < 6; j++) {
 							if(i >= 4 && j >= 4)
 								continue;
-							String cname = "c" + (i * 20 + j);
+							String cname = "c" + (i * grid_size  + j);
 							cnodemap.get(cname).setSelected(true);
 						}
 					}
 				}else if(k ==64) {
 					for(int i = 0; i < 8; i++) {
 						for(int j = 0; j < 8; j++) {
-							String cname = "c" + (i * 20 + j);
+							String cname = "c" + (i * grid_size  + j);
 							cnodemap.get(cname).setSelected(true);
 						}
 					}

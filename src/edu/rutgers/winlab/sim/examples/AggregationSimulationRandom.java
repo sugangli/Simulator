@@ -27,8 +27,8 @@ public class AggregationSimulationRandom {
 	}
 
 	public static void main(String[] args) throws IOException {
-		if(args == null || args.length != 4) {
-			System.err.println("Usage: java -jar *.jar <compute nodes topo> <aps trace folder> <# of aggregators> <timeout in second>");
+		if(args == null || args.length != 5) {
+			System.err.println("Usage: java -jar *.jar <compute nodes topo> <aps trace folder> <# of aggregators> <timeout in second> <grid size>");
 		}else {
 
 			String filename = args[0];
@@ -40,8 +40,8 @@ public class AggregationSimulationRandom {
 				String ap_filename = args[1] + "/" + f.getName();
 				System.err.printf("Trace File = %s # of Aggr = %s%n", ap_filename, args[2]);
 				HashMap<String, AccessPoint> ap_map = new HashMap<>();
-				TopoManager.initAPsfromMap(ap_map, cnodemap, 20, ap_filename);
-
+				TopoManager.initAPsfromMap(ap_map, cnodemap, Integer.parseInt(args[4]), ap_filename);
+				
 				for(Map.Entry<String, AccessPoint> entry: ap_map.entrySet()) {
 					entry.getValue().setDataRate(10);
 				}
